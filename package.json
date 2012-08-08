@@ -4,12 +4,16 @@
   "description": "Unzip API compatible with fstream",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/tap ./test"
+    "test": "./node_modules/.bin/tap --tap ./test/**/*.js"
   },
   "repository": "",
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "tap": "~0.3.0"
+    "tap": "~0.3.0",
+    "temp": "~0.4.0"
+  },
+  "dependencies": {
+    "fstream": "~0.1.18"
   }
 }
