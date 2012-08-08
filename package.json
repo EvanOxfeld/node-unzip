@@ -1,6 +1,6 @@
 {
   "name": "unzip",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Unzip API compatible with fstream",
   "main": "index.js",
   "scripts": {
