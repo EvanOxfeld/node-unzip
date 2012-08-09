@@ -2,19 +2,33 @@
   "name": "unzip",
   "version": "0.0.1",
   "description": "Unzip API compatible with fstream",
-  "main": "index.js",
-  "scripts": {
-    "test": "./node_modules/.bin/tap --tap --stderr ./test/*.js"
+  "author": "Evan Oxfeld <evan.oxfeld@nearinfinity.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nearinfinity/node-unzip.git"
   },
-  "repository": "",
-  "author": "",
   "license": "MIT",
+  "dependencies": {
+    "fstream": "~0.1.18",
+    "pullstream": "git://github.com/nearinfinity/node-pullstream.git"
+  },
   "devDependencies": {
     "tap": "~0.3.0",
     "temp": "~0.4.0"
   },
-  "dependencies": {
-    "fstream": "~0.1.18",
-    "pullstream": "git://github.com/nearinfinity/node-pullstream.git"
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "keywords": [
+    "zip",
+    "unzip",
+    "zlib",
+    "uncompress",
+    "archive"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/tap --tap --stderr ./test/*.js"
   }
 }
