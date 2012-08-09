@@ -1,3 +1,3 @@
 'use strict';
 
-exports.Parse = require('./lib/parser');
+exports.Parse = require('./lib/parse');

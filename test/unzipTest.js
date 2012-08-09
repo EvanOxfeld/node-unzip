@@ -11,6 +11,9 @@ test("uncompressed archive", function (t) {
   var archive = path.join(__dirname, './data/uncompressed.zip');
 
   temp.mkdir('node-unzip-', function (err, dirPath) {
+    if (err) {
+      t.fail(err);
+    }
     var unzipParser = unzip.Parse();
     unzipParser.on('error', function(err) {
       console.log(err);
@@ -23,6 +26,10 @@ test("uncompressed archive", function (t) {
     });
     writer.on('end', function() {
       console.error('end', arguments);
+      t.end();
+    });
+    writer.on('close', function() {
+      console.error('writer close - end test?');
       t.end();
     });
 
