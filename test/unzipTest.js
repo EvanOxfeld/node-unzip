@@ -23,12 +23,7 @@ test("uncompressed archive", function (t) {
     writer.on('error', function(err) {
       t.fail(err);
     });
-    writer.on('end', function() {
-      console.error('------------------writer end', arguments);
-      t.end();
-    });
     writer.on('close', function() {
-      console.error('------------------writer close - end test?');
       t.end();
     });
 
@@ -45,24 +40,14 @@ test("compressed archive", function (t) {
     }
     var unzipParser = unzip.Parse();
     unzipParser.on('error', function(err) {
-      console.log('unzipParser error', err);
       return t.fail(err);
     });
-    unzipParser.on('end', function() {
-      console.log('unzipParser end');
-    });
-
 
     var writer = fstream.Writer(dirPath);
     writer.on('error', function(err) {
       t.fail(err);
     });
-    writer.on('end', function() {
-      console.error('------------------writer end', arguments);
-      t.end();
-    });
     writer.on('close', function() {
-      console.error('------------------writer close - end test?');
       t.end();
     });
 
