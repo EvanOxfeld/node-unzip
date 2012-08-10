@@ -1,8 +1,9 @@
 # unzip
 
-Streaming unzip tool written in node.js.
+Streaming cross-platform unzip tool written in node.js.
 
-unzip uses the zlib inflation built into the core of node.js so there are no compiled dependencies.
+Unzip uses the zlib inflation built into the core of node.js so there are no compiled dependencies.  Unzip is also an
+example use case of node-pullstream.
 
 ## Installation
 
