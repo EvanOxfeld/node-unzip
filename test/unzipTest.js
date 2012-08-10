@@ -16,7 +16,6 @@ test("uncompressed archive", function (t) {
     }
     var unzipParser = unzip.Parse();
     unzipParser.on('error', function(err) {
-      console.log(err);
       return t.fail(err);
     });
 
@@ -25,11 +24,11 @@ test("uncompressed archive", function (t) {
       t.fail(err);
     });
     writer.on('end', function() {
-      console.error('end', arguments);
+      console.error('------------------writer end', arguments);
       t.end();
     });
     writer.on('close', function() {
-      console.error('writer close - end test?');
+      console.error('------------------writer close - end test?');
       t.end();
     });
 
@@ -41,18 +40,29 @@ test("compressed archive", function (t) {
   var archive = path.join(__dirname, './data/compressed.zip');
 
   temp.mkdir('node-unzip-', function (err, dirPath) {
+    if (err) {
+      t.fail(err);
+    }
     var unzipParser = unzip.Parse();
     unzipParser.on('error', function(err) {
-      console.log(err);
+      console.log('unzipParser error', err);
       return t.fail(err);
     });
+    unzipParser.on('end', function() {
+      console.log('unzipParser end');
+    });
+
 
     var writer = fstream.Writer(dirPath);
     writer.on('error', function(err) {
       t.fail(err);
     });
     writer.on('end', function() {
-      console.error('end', arguments);
+      console.error('------------------writer end', arguments);
+      t.end();
+    });
+    writer.on('close', function() {
+      console.error('------------------writer close - end test?');
       t.end();
     });
 
