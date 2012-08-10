@@ -28,7 +28,7 @@
     "uncompress",
     "archive"
   ],
-  "main": "index.js",
+  "main": "unzip.js",
   "scripts": {
     "test": "./node_modules/.bin/tap --tap --stderr ./test/*.js"
   }
