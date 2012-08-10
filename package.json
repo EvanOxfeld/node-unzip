@@ -10,7 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "fstream": "~0.1.18",
-    "pullstream": "git://github.com/nearinfinity/node-pullstream.git"
+    "pullstream": "git://github.com/nearinfinity/node-pullstream.git",
+    "binary": "~0.3.0"
   },
   "devDependencies": {
     "tap": "~0.3.0",
