@@ -3,6 +3,16 @@
   "version": "0.0.1",
   "description": "Unzip API compatible with fstream",
   "author": "Evan Oxfeld <evan.oxfeld@nearinfinity.com>",
+  "maintainers": [
+    {
+      "name": "Evan Oxfeld",
+      "email": "evan.oxfeld@nearinfinity.com"
+    },
+    {
+      "name": "Joe Ferner",
+      "email": "joe.ferner@nearinfinity.com"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/nearinfinity/node-unzip.git"
