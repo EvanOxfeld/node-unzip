@@ -15,7 +15,8 @@
   },
   "devDependencies": {
     "tap": "~0.3.0",
-    "temp": "~0.4.0"
+    "temp": "~0.4.0",
+    "dirdiff": "0.0.1"
   },
   "directories": {
     "example": "examples",
