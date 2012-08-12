@@ -15,18 +15,13 @@ test("uncompressed archive", function (t) {
     if (err) {
       t.fail(err);
     }
-    var unzipParser = unzip.Parse();
-    unzipParser.on('error', function(err) {
+    var unzipExtracter = unzip.Extract({ path: dirPath });
+    unzipExtracter.on('error', function(err) {
       return t.fail(err);
     });
+    unzipExtracter.on('end', testExtractionResults);
 
-    var writer = fstream.Writer(dirPath);
-    writer.on('error', function(err) {
-      t.fail(err);
-    });
-    writer.on('close', testExtractionResults);
-
-    fs.createReadStream(archive).pipe(unzipParser).pipe(writer);
+    fs.createReadStream(archive).pipe(unzipExtracter);
 
     function testExtractionResults() {
       dirdiff(path.join(__dirname, '../testData/uncompressed/inflated'), dirPath, {
@@ -49,18 +44,13 @@ test("compressed archive", function (t) {
     if (err) {
       t.fail(err);
     }
-    var unzipParser = unzip.Parse();
-    unzipParser.on('error', function(err) {
+    var unzipExtracter = unzip.Extract({ path: dirPath });
+    unzipExtracter.on('error', function(err) {
       return t.fail(err);
     });
+    unzipExtracter.on('end', testExtractionResults);
 
-    var writer = fstream.Writer(dirPath);
-    writer.on('error', function(err) {
-      t.fail(err);
-    });
-    writer.on('close', testExtractionResults);
-
-    fs.createReadStream(archive).pipe(unzipParser).pipe(writer);
+    fs.createReadStream(archive).pipe(unzipExtracter);
 
     function testExtractionResults() {
       dirdiff(path.join(__dirname, '../testData/compressed/inflated'), dirPath, {
