@@ -43,6 +43,6 @@
   ],
   "main": "unzip.js",
   "scripts": {
-    "test": "./node_modules/.bin/tap --tap --stderr ./test/*.js"
+    "test": "./node_modules/.bin/tap ./test/*.js"
   }
 }
