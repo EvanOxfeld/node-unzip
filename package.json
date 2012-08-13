@@ -1,7 +1,7 @@
 {
   "name": "unzip",
   "version": "0.0.1",
-  "description": "Unzip API compatible with fstream",
+  "description": "Unzip cross-platform streaming API compatible with fstream and fs.ReadStream",
   "author": "Evan Oxfeld <evan.oxfeld@nearinfinity.com>",
   "maintainers": [
     {
@@ -37,7 +37,9 @@
     "unzip",
     "zlib",
     "uncompress",
-    "archive"
+    "archive",
+    "stream",
+    "extract"
   ],
   "main": "unzip.js",
   "scripts": {

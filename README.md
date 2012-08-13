@@ -2,7 +2,8 @@
 
 Streaming cross-platform unzip tool written in node.js.
 
-Unzip uses the zlib inflation built into the core of node.js so there are no compiled dependencies.  Unzip is also an
+Unzip provides simple APIs similar to [node-tar](https://github.com/isaacs/node-tar) for parsing and extracting zip files.
+There are no added compiled dependencies - inflation is handled by node.js's built in zlib support.  Unzip is also an
 example use case of [node-pullstream](https://github.com/nearinfinity/node-pullstream).
 
 ## Installation
@@ -11,13 +12,28 @@ example use case of [node-pullstream](https://github.com/nearinfinity/node-pulls
 $ npm install unzip
 ```
 
-## Quick Example
+## Quick Examples
 
+### Extract to a directory
+```javascript
+fs.createReadStream('path/to/archive.zip').pipe(unzip.Extract({ path: 'output/path' }));
+```
+
+### Parse zip file contents
 ```javascript
 var readStream = fs.createReadStream('path/to/archive.zip');
 var writeStream = fstream.Writer('output/path');
 
-fs.createReadStream(readStream).pipe(unzip.Parse()).pipe(writeStream);
+fs.createReadStream('path/to/archive.zip')
+  .pipe(unzip.Parse())
+  .on('entry', function (entry) {
+    var fileName = entry.path;
+    var type = entry.type; // 'Directory' or 'File'
+    var size = entry.size;
+
+    //process the entry or pipe it to another stream
+    ...
+  });
 ```
 
 ## License
