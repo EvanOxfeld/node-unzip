@@ -13,25 +13,25 @@ test("uncompressed archive", function (t) {
 
   temp.mkdir('node-unzip-', function (err, dirPath) {
     if (err) {
-      t.fail(err);
+      throw err;
     }
-    var unzipExtracter = unzip.Extract({ path: dirPath });
-    unzipExtracter.on('error', function(err) {
-      return t.fail(err);
+    var unzipExtractor = unzip.Extract({ path: dirPath });
+    unzipExtractor.on('error', function(err) {
+      throw err;
     });
-    unzipExtracter.on('end', testExtractionResults);
+    unzipExtractor.on('end', testExtractionResults);
 
-    fs.createReadStream(archive).pipe(unzipExtracter);
+    fs.createReadStream(archive).pipe(unzipExtractor);
 
     function testExtractionResults() {
       dirdiff(path.join(__dirname, '../testData/uncompressed/inflated'), dirPath, {
         fileContents: true
       }, function (err, diffs) {
         if (err) {
-          return t.fail(err);
+          throw err;
         }
-        t.equal(0, diffs.length, 'archive directory incorrect');
-        return t.end();
+        t.equal(0, diffs.length, 'extracted directory contents');
+        t.end();
       });
     }
   });
@@ -42,25 +42,25 @@ test("compressed archive", function (t) {
 
   temp.mkdir('node-unzip-', function (err, dirPath) {
     if (err) {
-      t.fail(err);
+      throw err;
     }
-    var unzipExtracter = unzip.Extract({ path: dirPath });
-    unzipExtracter.on('error', function(err) {
-      return t.fail(err);
+    var unzipExtractor = unzip.Extract({ path: dirPath });
+    unzipExtractor.on('error', function(err) {
+      throw err;
     });
-    unzipExtracter.on('end', testExtractionResults);
+    unzipExtractor.on('end', testExtractionResults);
 
-    fs.createReadStream(archive).pipe(unzipExtracter);
+    fs.createReadStream(archive).pipe(unzipExtractor);
 
     function testExtractionResults() {
       dirdiff(path.join(__dirname, '../testData/compressed/inflated'), dirPath, {
         fileContents: true
       }, function (err, diffs) {
         if (err) {
-          return t.fail(err);
+          throw err;
         }
-        t.equal(0, diffs.length, 'archive directory incorrect');
-        return t.end();
+        t.equal(0, diffs.length, 'extracted directory contents');
+        t.end();
       });
     }
   });
