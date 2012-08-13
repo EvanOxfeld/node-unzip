@@ -13,30 +13,25 @@ test("uncompressed archive", function (t) {
 
   temp.mkdir('node-unzip-', function (err, dirPath) {
     if (err) {
-      t.fail(err);
+      throw err;
     }
-    var unzipParser = unzip.Parse();
-    unzipParser.on('error', function(err) {
-      return t.fail(err);
+    var unzipExtractor = unzip.Extract({ path: dirPath });
+    unzipExtractor.on('error', function(err) {
+      throw err;
     });
+    unzipExtractor.on('end', testExtractionResults);
 
-    var writer = fstream.Writer(dirPath);
-    writer.on('error', function(err) {
-      t.fail(err);
-    });
-    writer.on('close', testExtractionResults);
-
-    fs.createReadStream(archive).pipe(unzipParser).pipe(writer);
+    fs.createReadStream(archive).pipe(unzipExtractor);
 
     function testExtractionResults() {
       dirdiff(path.join(__dirname, '../testData/uncompressed/inflated'), dirPath, {
         fileContents: true
       }, function (err, diffs) {
         if (err) {
-          return t.fail(err);
+          throw err;
         }
-        t.equal(0, diffs.length, 'archive directory incorrect');
-        return t.end();
+        t.equal(0, diffs.length, 'extracted directory contents');
+        t.end();
       });
     }
   });
@@ -47,30 +42,25 @@ test("compressed archive", function (t) {
 
   temp.mkdir('node-unzip-', function (err, dirPath) {
     if (err) {
-      t.fail(err);
+      throw err;
     }
-    var unzipParser = unzip.Parse();
-    unzipParser.on('error', function(err) {
-      return t.fail(err);
+    var unzipExtractor = unzip.Extract({ path: dirPath });
+    unzipExtractor.on('error', function(err) {
+      throw err;
     });
+    unzipExtractor.on('end', testExtractionResults);
 
-    var writer = fstream.Writer(dirPath);
-    writer.on('error', function(err) {
-      t.fail(err);
-    });
-    writer.on('close', testExtractionResults);
-
-    fs.createReadStream(archive).pipe(unzipParser).pipe(writer);
+    fs.createReadStream(archive).pipe(unzipExtractor);
 
     function testExtractionResults() {
       dirdiff(path.join(__dirname, '../testData/compressed/inflated'), dirPath, {
         fileContents: true
       }, function (err, diffs) {
         if (err) {
-          return t.fail(err);
+          throw err;
         }
-        t.equal(0, diffs.length, 'archive directory incorrect');
-        return t.end();
+        t.equal(0, diffs.length, 'extracted directory contents');
+        t.end();
       });
     }
   });
