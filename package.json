@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "fstream": "~0.1.18",
-    "pullstream": "0.0.2",
+    "pullstream": "0.0.4",
     "binary": "~0.3.0"
   },
   "devDependencies": {
