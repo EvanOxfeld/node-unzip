@@ -3,7 +3,6 @@
 var test = require('tap').test;
 var fs = require('fs');
 var path = require('path');
-var fstream = require('fstream');
 var temp = require('temp');
 var dirdiff = require('dirdiff');
 var unzip = require('../');
