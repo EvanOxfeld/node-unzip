@@ -3,7 +3,6 @@
 var test = require('tap').test;
 var fs = require('fs');
 var path = require('path');
-var fstream = require('fstream');
 var temp = require('temp');
 var dirdiff = require('dirdiff');
 var unzip = require('../');
@@ -19,7 +18,7 @@ test("uncompressed archive", function (t) {
     unzipExtractor.on('error', function(err) {
       throw err;
     });
-    unzipExtractor.on('end', testExtractionResults);
+    unzipExtractor.on('close', testExtractionResults);
 
     fs.createReadStream(archive).pipe(unzipExtractor);
 
@@ -30,7 +29,7 @@ test("uncompressed archive", function (t) {
         if (err) {
           throw err;
         }
-        t.equal(0, diffs.length, 'extracted directory contents');
+        t.equal(diffs.length, 0, 'extracted directory contents');
         t.end();
       });
     }
@@ -48,7 +47,7 @@ test("compressed archive", function (t) {
     unzipExtractor.on('error', function(err) {
       throw err;
     });
-    unzipExtractor.on('end', testExtractionResults);
+    unzipExtractor.on('close', testExtractionResults);
 
     fs.createReadStream(archive).pipe(unzipExtractor);
 
@@ -59,7 +58,7 @@ test("compressed archive", function (t) {
         if (err) {
           throw err;
         }
-        t.equal(0, diffs.length, 'extracted directory contents');
+        t.equal(diffs.length, 0, 'extracted directory contents');
         t.end();
       });
     }
