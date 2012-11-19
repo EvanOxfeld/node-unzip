@@ -18,7 +18,7 @@ test("uncompressed archive", function (t) {
     unzipExtractor.on('error', function(err) {
       throw err;
     });
-    unzipExtractor.on('end', testExtractionResults);
+    unzipExtractor.on('close', testExtractionResults);
 
     fs.createReadStream(archive).pipe(unzipExtractor);
 
@@ -47,7 +47,7 @@ test("compressed archive", function (t) {
     unzipExtractor.on('error', function(err) {
       throw err;
     });
-    unzipExtractor.on('end', testExtractionResults);
+    unzipExtractor.on('close', testExtractionResults);
 
     fs.createReadStream(archive).pipe(unzipExtractor);
 
