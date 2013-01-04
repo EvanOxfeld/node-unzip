@@ -22,20 +22,29 @@ fs.createReadStream('path/to/archive.zip').pipe(unzip.Extract({ path: 'output/pa
 Extract emits the 'close' event once the zip's contents have been fully extracted to disk.
 
 ### Parse zip file contents
-```javascript
-var readStream = fs.createReadStream('path/to/archive.zip');
-var writeStream = fstream.Writer('output/path');
 
+Process each zip file entry or pipe entries to another stream
+
+```javascript
 fs.createReadStream('path/to/archive.zip')
   .pipe(unzip.Parse())
   .on('entry', function (entry) {
     var fileName = entry.path;
     var type = entry.type; // 'Directory' or 'File'
     var size = entry.size;
-
-    //process the entry or pipe it to another stream
     ...
   });
+```
+
+Or pipe the output of unzip.Parse() to fstream
+
+```javascript
+var readStream = fs.createReadStream('path/to/archive.zip');
+var writeStream = fstream.Writer('output/path');
+
+readStream
+  .pipe(unzip.Parse())
+  .pipe(writeStream)
 ```
 
 ## License
