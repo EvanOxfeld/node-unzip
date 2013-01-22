@@ -22,7 +22,7 @@
     "fstream": "0.1.21",
     "pullstream": "0.0.5",
     "binary": "0.3.0",
-    "readable-stream": "0.1.0"
+    "readable-stream": "~0.2.0"
   },
   "devDependencies": {
     "tap": "~0.3.0",
