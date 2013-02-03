@@ -20,10 +20,12 @@
   "license": "MIT",
   "dependencies": {
     "fstream": "~0.1.21",
-    "pullstream": "~0.0.6",
+    "pullstream": "~0.1.0",
     "binary": "~0.3.0",
     "readable-stream": "~0.2.0",
-    "setimmediate": "~1.0.1"
+    "setimmediate": "~1.0.1",
+    "buffers": "~0.1.1",
+    "over": "0.0.5"
   },
   "devDependencies": {
     "tap": "~0.3.0",
