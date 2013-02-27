@@ -1,12 +1,10 @@
-# unzip
+# unzip [![Build Status](https://travis-ci.org/nearinfinity/node-unzip.png)](https://travis-ci.org/nearinfinity/node-unzip)
 
 Streaming cross-platform unzip tool written in node.js.
 
 Unzip provides simple APIs similar to [node-tar](https://github.com/isaacs/node-tar) for parsing and extracting zip files.
 There are no added compiled dependencies - inflation is handled by node.js's built in zlib support.  Unzip is also an
 example use case of [node-pullstream](https://github.com/nearinfinity/node-pullstream).
-
-[![Build Status](https://travis-ci.org/nearinfinity/node-unzip.png)](https://travis-ci.org/nearinfinity/node-unzip)
 
 ## Installation
 
