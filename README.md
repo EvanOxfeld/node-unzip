@@ -32,7 +32,9 @@ fs.createReadStream('path/to/archive.zip')
     var fileName = entry.path;
     var type = entry.type; // 'Directory' or 'File'
     var size = entry.size;
-    ...
+    if (fileName === "this IS the file I'm looking for") {
+      entry.pipe(fs.createWriteStream('output/path'));
+    }
   });
 ```
 
@@ -71,3 +73,4 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
