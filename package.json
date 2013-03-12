@@ -20,12 +20,11 @@
   "license": "MIT",
   "dependencies": {
     "fstream": "~0.1.21",
-    "pullstream": "~0.1.0",
+    "pullstream": "git://github.com/EvanOxfeld/node-pullstream.git#revert-until-wip",
     "binary": "~0.3.0",
     "readable-stream": "~1.0.0",
     "setimmediate": "~1.0.1",
-    "buffers": "~0.1.1",
-    "over": "0.0.5"
+    "match-stream": "0.0.1"
   },
   "devDependencies": {
     "tap": "~0.3.0",
