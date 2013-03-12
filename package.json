@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "fstream": "~0.1.21",
-    "pullstream": "git://github.com/nearinfinity/node-pullstream.git#revert-until-wip",
+    "pullstream": "git://github.com/EvanOxfeld/node-pullstream.git#revert-until-wip",
     "binary": "~0.3.0",
     "readable-stream": "~1.0.0",
     "setimmediate": "~1.0.1",
