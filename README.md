@@ -23,7 +23,10 @@ Extract emits the 'close' event once the zip's contents have been fully extracte
 
 ### Parse zip file contents
 
-Process each zip file entry or pipe entries to another stream
+Process each zip file entry or pipe entries to another stream.
+
+__Important__: If you do not intend to consume an entry stream's raw data, call autodrain() to dispose of the entry's
+contents. Otherwise you risk running out of memory.
 
 ```javascript
 fs.createReadStream('path/to/archive.zip')
@@ -34,6 +37,8 @@ fs.createReadStream('path/to/archive.zip')
     var size = entry.size;
     if (fileName === "this IS the file I'm looking for") {
       entry.pipe(fs.createWriteStream('output/path'));
+    } else {
+      entry.autodrain();
     }
   });
 ```
