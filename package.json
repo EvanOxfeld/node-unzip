@@ -2,11 +2,11 @@
   "name": "unzip",
   "version": "0.1.9",
   "description": "Unzip cross-platform streaming API compatible with fstream and fs.ReadStream",
-  "author": "Evan Oxfeld <evan.oxfeld@nearinfinity.com>",
+  "author": "Evan Oxfeld <eoxfeld@gmail.com>",
   "maintainers": [
     {
       "name": "Evan Oxfeld",
-      "email": "evan.oxfeld@nearinfinity.com"
+      "email": "eoxfeld@gmail.com"
     },
     {
       "name": "Joe Ferner",
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/nearinfinity/node-unzip.git"
+    "url": "https://github.com/EvanOxfeld/node-unzip.git"
   },
   "license": "MIT",
   "dependencies": {
@@ -47,6 +47,6 @@
   ],
   "main": "unzip.js",
   "scripts": {
-    "test": "./node_modules/.bin/tap ./test/*.js"
+    "test": "tap ./test/*.js"
   }
 }
