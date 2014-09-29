@@ -1,17 +1,10 @@
 {
-  "name": "unzip",
-  "version": "0.1.9",
+  "name": "node-unzip-2",
+  "version": "0.2.0",
   "description": "Unzip cross-platform streaming API compatible with fstream and fs.ReadStream",
-  "author": "Evan Oxfeld <evan.oxfeld@nearinfinity.com>",
+  "author": "Hlib Dmytriiev <glebdmitriew@gmail.com>",
   "maintainers": [
-    {
-      "name": "Evan Oxfeld",
-      "email": "evan.oxfeld@nearinfinity.com"
-    },
-    {
-      "name": "Joe Ferner",
-      "email": "joe.ferner@nearinfinity.com"
-    }
+    "Hlib Dmytriiev <glebdmitriew@gmail.com>"
   ],
   "repository": {
     "type": "git",
@@ -33,7 +26,6 @@
     "stream-buffers": "~0.2.3"
   },
   "directories": {
-    "example": "examples",
     "test": "test"
   },
   "keywords": [
@@ -47,6 +39,10 @@
   ],
   "main": "unzip.js",
   "scripts": {
-    "test": "./node_modules/.bin/tap ./test/*.js"
-  }
+    "test": "tap ./test/*.js"
+  },
+  "bugs": {
+    "url": "https://github.com/glebdmitriew/node-unzip-2/issues"
+  },
+  "homepage": "https://github.com/glebdmitriew/node-unzip-2"
 }
