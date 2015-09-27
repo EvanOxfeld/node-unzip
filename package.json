@@ -27,10 +27,10 @@
     "match-stream": ">= 0.0.2 < 1"
   },
   "devDependencies": {
-    "tap": ">= 0.3.0 < 1",
-    "temp": ">= 0.4.0 < 1",
     "dirdiff": ">= 0.0.1 < 1",
-    "stream-buffers": ">= 0.2.5 < 1"
+    "stream-buffers": ">= 0.2.5 < 1",
+    "tap": "^1.4.1",
+    "temp": ">= 0.4.0 < 1"
   },
   "directories": {
     "example": "examples",
