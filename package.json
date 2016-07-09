@@ -1,9 +1,13 @@
 {
-  "name": "unzip",
-  "version": "0.1.11",
-  "description": "Unzip cross-platform streaming API compatible with fstream and fs.ReadStream",
+  "name": "unzipper",
+  "version": "0.2.0",
+  "description": "Unzip cross-platform streaming API ",
   "author": "Evan Oxfeld <eoxfeld@gmail.com>",
-  "maintainers": [
+  "contributors": [
+    {
+      "name": "Ziggy Jonsson",
+      "email": "ziggy.jonsson.nyc@gmail.com"
+    },
     {
       "name": "Evan Oxfeld",
       "email": "eoxfeld@gmail.com"
@@ -15,16 +19,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/EvanOxfeld/node-unzip.git"
+    "url": "https://github.com/ZJONSSON/node-unzipper.git"
   },
   "license": "MIT",
   "dependencies": {
-    "fstream": ">= 0.1.30 < 1",
-    "pullstream": ">= 0.4.1 < 1",
-    "binary": ">= 0.3.0 < 1",
-    "readable-stream": "~1.0.31",
-    "setimmediate": ">= 1.0.1 < 2",
-    "match-stream": ">= 0.0.2 < 1"
+    "binary": "~0.3.0",
+    "bluebird": "^3.4.1",
+    "fstream": "~1.0.10",
+    "readable-stream": "~1.0.31"
   },
   "devDependencies": {
     "tap": ">= 0.3.0 < 1",
