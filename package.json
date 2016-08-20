@@ -1,6 +1,6 @@
 {
   "name": "unzipper",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Unzip cross-platform streaming API ",
   "author": "Evan Oxfeld <eoxfeld@gmail.com>",
   "contributors": [
@@ -24,8 +24,12 @@
   "license": "MIT",
   "dependencies": {
     "binary": "~0.3.0",
-    "bluebird": "^3.4.1",
-    "fstream": "~1.0.10"
+    "bluebird": "~3.4.1",
+    "buffer-indexof-polyfill": "~1.0.0",
+    "fstream": "~1.0.10",
+    "listenercount": "~1.0.1",
+    "readable-stream": "~2.1.5",
+    "setimmediate": "~1.0.4"
   },
   "devDependencies": {
     "tap": ">= 0.3.0 < 1",
