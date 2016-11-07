@@ -4,7 +4,9 @@ This is a fork of [node-unzip](https://github.com/EvanOxfeld/node-pullstream) wh
 * finish/close events are not always triggered, particular when the input stream is slower than the receivers
 * Any files are buffered into memory before passing on to entry
 
-The stucture of this fork is identical to the original, but uses ES6, Promises and inherit guarantees provided by node streams to ensure low memory footprint and guarantee finish/close events at the end of processing. 
+The stucture of this fork is similar to the original, but uses Promises and inherit guarantees provided by node streams to ensure low memory footprint and guarantee finish/close events at the end of processing.   The new `Parser` will push any parsed `entries` downstream if you pipe from it, while still supporting the legacy `entry` event as well.   
+
+Breaking changes: The new `Parser` will not automatically drain entries if there are no listeners or pipes in place.
 
 Unzipper provides simple APIs similar to [node-tar](https://github.com/isaacs/node-tar) for parsing and extracting zip files.
 There are no added compiled dependencies - inflation is handled by node.js's built in zlib support.  
@@ -46,17 +48,49 @@ fs.createReadStream('path/to/archive.zip')
     }
   });
 ```
+### Parse zip by piping entries downstream
 
-Or pipe the output of unzipper.Parse() to fstream
+If you `pipe` from unzipper the downstream components will receive each `entry` for further processing.   This allows for clean pipelines transforming zipfiles into unzipped data.
+
+Example using `stream.Transform`:
 
 ```js
-var readStream = fs.createReadStream('path/to/archive.zip');
-var writeStream = fstream.Writer('output/path');
-
-readStream
+fs.createReadStream('path/to/archive.zip')
   .pipe(unzipper.Parse())
-  .pipe(writeStream)
+  .pipe(stream.Transform({
+    objectMode: true,
+    _transform: function(entry,e,cb) {
+      var fileName = entry.path;
+      var type = entry.type; // 'Directory' or 'File'
+      var size = entry.size;
+      if (fileName === "this IS the file I'm looking for") {
+        entry.pipe(fs.createWriteStream('output/path'))
+          .on('finish',cb);
+      } else {
+        entry.autodrain();
+        cb();
+      }
+    }
+  }
+  }));
 ```
+
+Example using [etl](https://www.npmjs.com/package/etl):
+
+```js
+fs.createReadStream('path/to/archive.zip')
+  .pipe(unzipper.Parse())
+  .pipe(etl.map(entry => {
+    if (entry.path == "this IS the file I'm looking for")
+      return entry
+        .pipe(etl.toFile('output/path'))
+        .promise();
+    else
+      entry.autodrain();
+  }))
+  
+```
+
 
 ## Licenses
 See LICENCE
