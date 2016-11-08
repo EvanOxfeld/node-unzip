@@ -32,7 +32,7 @@ Extract emits the 'close' event once the zip's contents have been fully extracte
 Process each zip file entry or pipe entries to another stream.
 
 __Important__: If you do not intend to consume an entry stream's raw data, call autodrain() to dispose of the entry's
-contents. Otherwise you risk running out of memory.
+contents. Otherwise you the stream will halt.
 
 ```js
 fs.createReadStream('path/to/archive.zip')
@@ -91,6 +91,17 @@ fs.createReadStream('path/to/archive.zip')
   
 ```
 
+### Parse a single file and pipe contents
+
+`unzipper.parseOne([regex])` is a convenience method that unzips only one file from the archive and pipes the contents down (not the entry itself).  If no serch criteria is specified, the first file in the archive will be unzipped.  Otherwise, each filename will be compared to the criteria and the first one to match will be unzipped and piped down.  If no file matches then the the stream will end without any content.
+
+Example:
+
+```js
+fs.createReadStream('path/to/archive.zip')
+  .pipe(unzipper.ParseOne())
+  .pipe(fs.createReadStream('firstFile.txt'));
+```
 
 ## Licenses
 See LICENCE
