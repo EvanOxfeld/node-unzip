@@ -118,6 +118,21 @@ fs.createReadStream('path/to/archive.zip')
     else
       entry.autodrain();
   }))
+```
+
+### Parse.promise() syntax sugar
+
+The parser emits `finish` and `error` events like any other stream.  The parser additionally provides a promise wrapper around those two events to allow easy folding into existing Promise based structures.
+
+Example:
+
+```js
+fs.createReadStream('path/to/archive.zip')
+  .pipe(unzipper.Parse()
+  .on('entry', entry => entry.autodrain())
+  .promise()
+  .then( () => console.log('done'), e => console.log('error',e));
+```
 
 
 ## Licenses
