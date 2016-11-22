@@ -103,5 +103,22 @@ fs.createReadStream('path/to/archive.zip')
   .pipe(fs.createReadStream('firstFile.txt'));
 ```
 
+### Buffering the content of an entry into memory
+
+While the recommended strategy of consuming the unzipped contents is using streams, it is sometimes convenient to be able to get the full buffered contents of each file .  Each `entry` provides a `.buffer` function that consumes the entry by buffering the contents into memory and returning a promise to the complete buffer.  
+
+```js
+fs.createReadStream('path/to/archive.zip')
+  .pipe(unzipper.Parse())
+  .pipe(etl.map(entry => {
+    if (entry.path == "this IS the file I'm looking for")
+      entry
+        .buffer()
+        .then(content => fs.writeFile('output/path',content))
+    else
+      entry.autodrain();
+  }))
+
+
 ## Licenses
 See LICENCE
