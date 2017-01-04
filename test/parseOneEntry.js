@@ -12,6 +12,8 @@ var Stream = require('stream');
 if (!Stream.Writable)
   Stream = require('readable-stream');
 
+var archive = path.join(__dirname, '../testData/compressed-standard/archive.zip');
+
 test("pipe a single file entry out of a zip", function (t) {
   var writableStream = new streamBuffers.WritableStreamBuffer();
   writableStream.on('close', function () {
@@ -21,9 +23,16 @@ test("pipe a single file entry out of a zip", function (t) {
     t.end();
   });
 
-  var archive = path.join(__dirname, '../testData/compressed-standard/archive.zip');
-
   fs.createReadStream(archive)
     .pipe(unzip.ParseOne('file.txt'))
     .pipe(writableStream);
+});
+
+test('errors if file is not found', function (t) {
+  fs.createReadStream(archive)
+    .pipe(unzip.ParseOne('not_exists'))
+    .on('error',function(e) {
+      t.equal(e.message,'PATTERN_NOT_FOUND');
+      t.end();
+    });
 });
