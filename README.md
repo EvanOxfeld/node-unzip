@@ -17,6 +17,11 @@ There are no added compiled dependencies - inflation is handled by node.js's bui
 $ npm install unzipper
 ```
 
+## Options
+The following options can be passed to the parser:
+* `verbose : boolean` - logs information to screen
+* `bypassDirectory : boolean` - stop parsing when we reach the central directory
+
 ## Quick Examples
 
 ### Extract to a directory
