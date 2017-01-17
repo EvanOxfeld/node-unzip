@@ -9,18 +9,15 @@ The stucture of this fork is similar to the original, but uses Promises and inhe
 Breaking changes: The new `Parser` will not automatically drain entries if there are no listeners or pipes in place.
 
 Unzipper provides simple APIs similar to [node-tar](https://github.com/isaacs/node-tar) for parsing and extracting zip files.
-There are no added compiled dependencies - inflation is handled by node.js's built in zlib support.  
+There are no added compiled dependencies - inflation is handled by node.js's built in zlib support. 
+
+Please note:  Methods that use the Central Directory instead of parsing entire file can be found under [`Open`](#open)
 
 ## Installation
 
 ```bash
 $ npm install unzipper
 ```
-
-## Options
-The following options can be passed to the parser:
-* `verbose : boolean` - logs information to screen
-* `bypassDirectory : boolean` - stop parsing when we reach the central directory
 
 ## Quick Examples
 
@@ -139,6 +136,49 @@ fs.createReadStream('path/to/archive.zip')
   .then( () => console.log('done'), e => console.log('error',e));
 ```
 
+## Open
+Previous methods rely on the entire zipfile being received through a pipe.  The Open methods load take a different approach: load the central directory first (at the end of the zipfile) and provide the ability to pick and choose which zipfiles to extract, even extracting them in parallel.   The open methods return a promise on the contents of the directory, with individual `files` listed in an array.   Each file element has the following methods:
+* `stream()` - returns a stream of the unzipped content which can be piped to any destination
+* `buffer` - returns a promise on the buffered content of the file)
+Unlike adm-zip the Open methods will never read the entire zipfile into buffer.
+
+### Open.file([path])
+Returns a Promise to the central directory information with methods to extract individual files.   `start` and `end` options are used to avoid reading the whole file.
+
+Example:
+```js
+unzipper.Open.file('path/to/archive.zip')
+  .then(function(d) {
+    console.log('directory',d);
+    return new Promise(function(resolve,reject) {
+      d.files[0].stream()
+        .pipe(fs.createWriteStream('firstFile'))
+        .on('error',reject);
+        .on('finish',resolve)
+     });
+  });
+```
+
+### Open.url([requestLibrary], [url])
+This function will return a Promise to the central directory information from a URL point to a zipfile.  Range-headers are used to avoid reading the whole file.    Unzipper does not ship with a request library so you will have to provide it as the first option.    The url parameter can either be a string or an object that will be passed to each request (containing the url, but also any optional properties such as cookies, proxy etc)
+
+Live Example: (extracts a tiny xml file from the middle of a 500MB zipfile)
+
+```js
+var request = require('request');
+var unzipper = require('./unzip');
+
+unzipper.Open.url(request,'http://www2.census.gov/geo/tiger/TIGER2015/ZCTA5/tl_2015_us_zcta510.zip')
+  .then(function(d) {
+    var file = d.files.filter(function(d) {
+      return d.path === 'tl_2015_us_zcta510.shp.iso.xml';
+    })[0];
+    return file.buffer();
+  })
+  .then(function(d) {
+    console.log(d.toString());
+  });
+```
 
 ## Licenses
 See LICENCE
