@@ -138,8 +138,9 @@ fs.createReadStream('path/to/archive.zip')
 
 ## Open
 Previous methods rely on the entire zipfile being received through a pipe.  The Open methods load take a different approach: load the central directory first (at the end of the zipfile) and provide the ability to pick and choose which zipfiles to extract, even extracting them in parallel.   The open methods return a promise on the contents of the directory, with individual `files` listed in an array.   Each file element has the following methods:
-* `stream()` - returns a stream of the unzipped content which can be piped to any destination
-* `buffer` - returns a promise on the buffered content of the file)
+* `stream([password])` - returns a stream of the unzipped content which can be piped to any destination
+* `buffer([password])` - returns a promise on the buffered content of the file)
+If the file is encrypted you will have to supply a password to decrypt, otherwise you can leave blank.   
 Unlike adm-zip the Open methods will never read the entire zipfile into buffer.
 
 ### Open.file([path])
