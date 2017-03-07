@@ -3,7 +3,6 @@
 var test = require('tap').test;
 var fs = require('fs');
 var path = require('path');
-var temp = require('temp');
 var streamBuffers = require("stream-buffers");
 var unzip = require('../');
 var Stream = require('stream');
@@ -35,4 +34,13 @@ test('errors if file is not found', function (t) {
       t.equal(e.message,'PATTERN_NOT_FOUND');
       t.end();
     });
+});
+
+test('error in zip file', function(t) {
+  unzip.ParseOne()
+    .on('error',function(e) {
+      t.equal(e.message.indexOf('invalid signature'),0);
+      t.end();
+    })
+    .end('this is not a zip file');
 });
