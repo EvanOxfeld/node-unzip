@@ -36,11 +36,20 @@ test('errors if file is not found', function (t) {
     });
 });
 
-test('error in zip file', function(t) {
+test('error - invalid signature', function(t) {
   unzip.ParseOne()
     .on('error',function(e) {
       t.equal(e.message.indexOf('invalid signature'),0);
       t.end();
     })
     .end('this is not a zip file');
+});
+
+test('error - file ended', function(t) {
+  unzip.ParseOne()
+    .on('error',function(e) {
+      t.equal(e,'FILE_ENDED');
+      t.end();
+    })
+    .end('t');
 });
