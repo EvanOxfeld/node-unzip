@@ -61,7 +61,7 @@ fs.createReadStream('path/to/archive.zip')
   .pipe(unzipper.Parse())
   .pipe(stream.Transform({
     objectMode: true,
-    _transform: function(entry,e,cb) {
+    transform: function(entry,e,cb) {
       var fileName = entry.path;
       var type = entry.type; // 'Directory' or 'File'
       var size = entry.size;
