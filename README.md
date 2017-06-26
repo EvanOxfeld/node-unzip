@@ -181,5 +181,28 @@ unzipper.Open.url(request,'http://www2.census.gov/geo/tiger/TIGER2015/ZCTA5/tl_2
   });
 ```
 
+### Open.s3([aws-sdk], [params])
+This function will return a Promise to the central directory information from a zipfile on S3.  Range-headers are used to avoid reading the whole file.    Unzipper does not ship with with the aws-sdk so you have to provide an instanciated client as first arguments.    The params object requires `Bucket` and `Key` to fetch the correct file.
+
+Example:
+
+```js
+var unzipper = require('./unzip');
+var AWS = require('aws-sdk');
+var s3Client = AWS.S3(config);
+
+unzipper.Open.s3(s3Client,{Bucket: 'unzipper', Key: 'archive.zip'})
+  .then(function(d) {
+    console.log('directory',d);
+    return new Promise(function(resolve,reject) {
+      d.files[0].stream()
+        .pipe(fs.createWriteStream('firstFile'))
+        .on('error',reject);
+        .on('finish',resolve)
+     });
+  });
+```
+
+
 ## Licenses
 See LICENCE
