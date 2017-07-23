@@ -160,8 +160,8 @@ unzipper.Open.file('path/to/archive.zip')
   });
 ```
 
-### Open.url([requestLibrary], [url|options])
-This function will return a Promise to the central directory information from a URL point to a zipfile.  Range-headers are used to avoid reading the whole file.    Unzipper does not ship with a request library so you will have to provide it as the first option.    The url parameter can either be a string or an object that will be passed to each request (containing the url, but also any optional properties such as cookies, proxy etc)
+### Open.url([requestLibrary], [url | options])
+This function will return a Promise to the central directory information from a URL point to a zipfile.  Range-headers are used to avoid reading the whole file. Unzipper does not ship with a request library so you will have to provide it as the first option.
 
 Live Example: (extracts a tiny xml file from the middle of a 500MB zipfile)
 
@@ -181,7 +181,8 @@ unzipper.Open.url(request,'http://www2.census.gov/geo/tiger/TIGER2015/ZCTA5/tl_2
   });
 ```
 
-This function takes a second parameter which can either be a string containing the `url` to request, or an `options` object to invoke the supplied `request` library with. This can be used when authentication to a third party service is required.
+
+This function takes a second parameter which can either be a string containing the `url` to request, or an `options` object to invoke the supplied `request` library with. This can be used when other request options are required, such as custom heders or authentication to a third party service.
 
 ```js
 const request = require('google-oauth-jwt').requestWithJWT();
