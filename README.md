@@ -16,7 +16,9 @@ $ npm install unzip
 
 ### Extract to a directory
 ```javascript
-fs.createReadStream('path/to/archive.zip').pipe(unzip.Extract({ path: 'output/path' }));
+const stream = fs.createReadStream('path/to/archive.zip').pipe(unzip.Extract({ path: 'output/path' }));
+
+stream.on('finish', function () { ... });
 ```
 
 Extract emits the 'close' event once the zip's contents have been fully extracted to disk.
