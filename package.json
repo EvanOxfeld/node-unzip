@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "aws-sdk": "^2.77.0",
-    "request": "^2.79.0",
+    "request": "2.79.0",
     "tap": ">= 0.3.0 < 1",
     "temp": ">= 0.4.0 < 1",
     "dirdiff": ">= 0.0.1 < 1",
