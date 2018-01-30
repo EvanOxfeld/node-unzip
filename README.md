@@ -154,7 +154,7 @@ unzipper.Open.file('path/to/archive.zip')
     return new Promise(function(resolve,reject) {
       d.files[0].stream()
         .pipe(fs.createWriteStream('firstFile'))
-        .on('error',reject);
+        .on('error',reject)
         .on('finish',resolve)
      });
   });
@@ -219,7 +219,7 @@ unzipper.Open.s3(s3Client,{Bucket: 'unzipper', Key: 'archive.zip'})
     return new Promise(function(resolve,reject) {
       d.files[0].stream()
         .pipe(fs.createWriteStream('firstFile'))
-        .on('error',reject);
+        .on('error',reject)
         .on('finish',resolve)
      });
   });
