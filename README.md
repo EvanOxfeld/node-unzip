@@ -10,7 +10,7 @@ example use case of [node-pullstream](https://github.com/nearinfinity/node-pulls
 ## Installation
 
 ```bash
-$ npm install unzip2
+$ npm install node-unzip-2
 ```
 
 ## Quick Examples
