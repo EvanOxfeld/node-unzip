@@ -225,6 +225,26 @@ unzipper.Open.s3(s3Client,{Bucket: 'unzipper', Key: 'archive.zip'})
   });
 ```
 
+### Open.buffer(buffer)
+If you already have the zip file in-memory as a buffer, you can open the contents directly.
+
+Example:
+
+```js
+// never use readFileSync - only used here to simplify the example
+var buffer = fs.readFileSync('path/to/arhive.zip');  
+
+unzipper.Open.buffer(buffer)
+  .then(function(d) {
+    console.log('directory',d);
+    return new Promise(function(resolve,reject) {
+      d.files[0].stream()
+        .pipe(fs.createWriteStream('firstFile'))
+        .on('error',reject)
+        .on('finish',resolve)
+     });
+  });
+```
 
 ## Licenses
 See LICENCE
