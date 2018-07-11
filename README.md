@@ -1,4 +1,4 @@
-# unzipper [![Build Status](https://api.travis-ci.org/ZJONSSON/node-unzipper.png)](https://travis-ci.org/ZJONSSON/node-unzipper.svg?branch=master)
+# unzipper [![Build Status](https://api.travis-ci.org/ZJONSSON/node-unzipper.png?branch=master)](https://travis-ci.org/ZJONSSON/node-unzipper?branch=master)
 
 This is a fork of [node-unzip](https://github.com/EvanOxfeld/node-unzip) which has not been maintained in a while.  This fork addresses the following issues:
 * finish/close events are not always triggered, particular when the input stream is slower than the receivers
