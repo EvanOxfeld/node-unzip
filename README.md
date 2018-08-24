@@ -34,7 +34,18 @@ Extract emits the 'close' event once the zip's contents have been fully extracte
 Process each zip file entry or pipe entries to another stream.
 
 __Important__: If you do not intend to consume an entry stream's raw data, call autodrain() to dispose of the entry's
-contents. Otherwise you the stream will halt.
+contents. Otherwise you the stream will halt.   `.autodrain()` returns an empty stream that provides `error` and `finish` events.
+Additionally you can call `.autodrain().promise()` to get the promisified version of success or failure of the autodrain.
+
+```
+// If you want to handle autodrain errors you can either:
+entry.autodrain().catch(e => handleError);
+// or
+entry.autodrain().on('error' => handleError);
+```
+
+Here is a quick example:
+
 
 ```js
 fs.createReadStream('path/to/archive.zip')
