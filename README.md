@@ -141,7 +141,7 @@ Example:
 
 ```js
 fs.createReadStream('path/to/archive.zip')
-  .pipe(unzipper.Parse()
+  .pipe(unzipper.Parse())
   .on('entry', entry => entry.autodrain())
   .promise()
   .then( () => console.log('done'), e => console.log('error',e));
