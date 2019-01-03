@@ -2,6 +2,7 @@
 
 var test = require('tap').test;
 var fs = require('fs');
+var os = require('os');
 var path = require('path');
 var temp = require('temp');
 var unzip = require('../');
@@ -35,7 +36,7 @@ test("Only emit finish/close when extraction has completed", function (t) {
     }
 
 
-    var unzipExtractor = unzip.Extract({ getWriter: getWriter, path: '/tmp' });
+    var unzipExtractor = unzip.Extract({ getWriter: getWriter, path: os.tmpdir() });
     unzipExtractor.on('error', function(err) {
       throw err;
     });
