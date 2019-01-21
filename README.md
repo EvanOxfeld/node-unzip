@@ -1,6 +1,20 @@
-# unzipper [![Build Status](https://api.travis-ci.org/ZJONSSON/node-unzipper.png?branch=master)](https://travis-ci.org/ZJONSSON/node-unzipper?branch=master)
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+[![Test Coverage][travis-image]][travis-url]
+[![Coverage][coverage-image]][coverage-url]
 
-This is a fork of [node-unzip](https://github.com/EvanOxfeld/node-unzip) which has not been maintained in a while.  This fork addresses the following issues:
+[npm-image]: https://img.shields.io/npm/v/unzipper.svg
+[npm-url]: https://npmjs.org/package/unzipper
+[travis-image]: https://api.travis-ci.org/ZJONSSON/node-unzipper.png?branch=master
+[travis-url]: https://travis-ci.org/ZJONSSON/node-unzipper?branch=master
+[downloads-image]: https://img.shields.io/npm/dm/unzipper.svg
+[downloads-url]: https://npmjs.org/package/unzipper
+[coverage-image]: https://3tjjj5abqi.execute-api.us-east-1.amazonaws.com/prod/node-unzipper/badge
+[coverage-url]: https://3tjjj5abqi.execute-api.us-east-1.amazonaws.com/prod/node-unzipper/url
+
+# unzipper
+
+This is an active fork and drop-in replacement of the [node-unzip](https://github.com/EvanOxfeld/node-unzip) and addresses the following issues:
 * finish/close events are not always triggered, particular when the input stream is slower than the receivers
 * Any files are buffered into memory before passing on to entry
 
@@ -27,7 +41,7 @@ fs.createReadStream('path/to/archive.zip')
   .pipe(unzipper.Extract({ path: 'output/path' }));
 ```
 
-Extract emits the 'close' event once the zip's contents have been fully extracted to disk.
+Extract emits the 'close' event once the zip's contents have been fully extracted to disk. Extract uses [fstream.Writer](https://www.npmjs.com/package/fstream) and therefore needs need an absolute path to the destination directory.  This directory will be automatically created if it doesn't already exits.
 
 ### Parse zip file contents
 
@@ -123,13 +137,14 @@ While the recommended strategy of consuming the unzipped contents is using strea
 ```js
 fs.createReadStream('path/to/archive.zip')
   .pipe(unzipper.Parse())
-  .pipe(etl.map(entry => {
-    if (entry.path == "this IS the file I'm looking for")
-      entry
-        .buffer()
-        .then(content => fs.writeFile('output/path',content))
-    else
+  .pipe(etl.map(async entry => {
+    if (entry.path == "this IS the file I'm looking for") {
+      const content = await entry.buffer();
+      await fs.writeFile('output/path',content);
+    }
+    else {
       entry.autodrain();
+    }
   }))
 ```
 
@@ -159,16 +174,19 @@ Returns a Promise to the central directory information with methods to extract i
 
 Example:
 ```js
-unzipper.Open.file('path/to/archive.zip')
-  .then(function(d) {
-    console.log('directory',d);
-    return new Promise(function(resolve,reject) {
-      d.files[0].stream()
-        .pipe(fs.createWriteStream('firstFile'))
-        .on('error',reject)
-        .on('finish',resolve)
-     });
+async function main() {
+  const directory = await unzipper.Open.file('path/to/archive.zip');
+  console.log('directory', d);
+  return new Promise( (resolve, reject) => {
+    directory.files[0]
+      .stream()
+      .pipe(fs.createWriteStream('firstFile'))
+      .on('error',reject)
+      .on('finish',resolve)
   });
+}
+
+main();
 ```
 
 ### Open.url([requestLibrary], [url | options])
@@ -180,16 +198,14 @@ Live Example: (extracts a tiny xml file from the middle of a 500MB zipfile)
 var request = require('request');
 var unzipper = require('./unzip');
 
-unzipper.Open.url(request,'http://www2.census.gov/geo/tiger/TIGER2015/ZCTA5/tl_2015_us_zcta510.zip')
-  .then(function(d) {
-    var file = d.files.filter(function(d) {
-      return d.path === 'tl_2015_us_zcta510.shp.iso.xml';
-    })[0];
-    return file.buffer();
-  })
-  .then(function(d) {
-    console.log(d.toString());
-  });
+async function main() {
+  const directory = await unzipper.Open.url(request,'http://www2.census.gov/geo/tiger/TIGER2015/ZCTA5/tl_2015_us_zcta510.zip');
+  const file = directory.files.find(d => d.path === 'tl_2015_us_zcta510.shp.iso.xml');
+  const content = await file.buffer();
+  console.log(content.toString());
+}
+
+main();
 ```
 
 
@@ -199,18 +215,19 @@ This function takes a second parameter which can either be a string containing t
 const request = require('google-oauth-jwt').requestWithJWT();
 
 const googleStorageOptions = {
-    url: `https://www.googleapis.com/storage/v1/b/m-bucket-name/o/my-object-name`,
-    qs: { alt: 'media' },
-    jwt: {
-        email: google.storage.credentials.client_email,
-        key: google.storage.credentials.private_key,
-        scopes: ['https://www.googleapis.com/auth/devstorage.read_only']
-    }
+  url: `https://www.googleapis.com/storage/v1/b/m-bucket-name/o/my-object-name`,
+  qs: { alt: 'media' },
+  jwt: {
+      email: google.storage.credentials.client_email,
+      key: google.storage.credentials.private_key,
+      scopes: ['https://www.googleapis.com/auth/devstorage.read_only']
+  }
 });
 
-return unzipper.Open.url(request, googleStorageOptions).then((zip) => {
-    const file = zip.files.find((file) => file.path === 'my-filename');
-    return file.stream().pipe(res);
+async function getFile(req, res, next) {
+  const directory = await unzipper.Open.url(request, googleStorageOptions);
+  const file = zip.files.find((file) => file.path === 'my-filename');
+  return file.stream().pipe(res);
 });
 ```
 
@@ -224,16 +241,18 @@ var unzipper = require('./unzip');
 var AWS = require('aws-sdk');
 var s3Client = AWS.S3(config);
 
-unzipper.Open.s3(s3Client,{Bucket: 'unzipper', Key: 'archive.zip'})
-  .then(function(d) {
-    console.log('directory',d);
-    return new Promise(function(resolve,reject) {
-      d.files[0].stream()
-        .pipe(fs.createWriteStream('firstFile'))
-        .on('error',reject)
-        .on('finish',resolve)
-     });
+async function main() {
+  const directory = await unzipper.Open.s3(s3Client,{Bucket: 'unzipper', Key: 'archive.zip'});
+  return new Promise( (resolve, reject) => {
+    directory.files[0]
+      .stream()
+      .pipe(fs.createWriteStream('firstFile'))
+      .on('error',reject)
+      .on('finish',resolve)
   });
+}
+
+main();
 ```
 
 ### Open.buffer(buffer)
@@ -245,16 +264,13 @@ Example:
 // never use readFileSync - only used here to simplify the example
 var buffer = fs.readFileSync('path/to/arhive.zip');  
 
-unzipper.Open.buffer(buffer)
-  .then(function(d) {
-    console.log('directory',d);
-    return new Promise(function(resolve,reject) {
-      d.files[0].stream()
-        .pipe(fs.createWriteStream('firstFile'))
-        .on('error',reject)
-        .on('finish',resolve)
-     });
-  });
+async function main() {
+  const directory = await unzipper.Open.buffer(buffer);
+  console.log('directory',directory);
+  // ...
+}
+
+main();
 ```
 
 ## Licenses
