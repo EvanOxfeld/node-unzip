@@ -1,6 +1,20 @@
-# unzipper [![Build Status](https://api.travis-ci.org/ZJONSSON/node-unzipper.png?branch=master)](https://travis-ci.org/ZJONSSON/node-unzipper?branch=master)
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+[![Test Coverage][travis-image]][travis-url]
+[![Coverage][coverage-image]][coverage-url]
 
-This is a fork of [node-unzip](https://github.com/EvanOxfeld/node-unzip) which has not been maintained in a while.  This fork addresses the following issues:
+[npm-image]: https://img.shields.io/npm/v/unzipper.svg
+[npm-url]: https://npmjs.org/package/unzipper
+[travis-image]: https://api.travis-ci.org/ZJONSSON/node-unzipper.png?branch=master
+[travis-url]: https://travis-ci.org/ZJONSSON/node-unzipper?branch=master
+[downloads-image]: https://img.shields.io/npm/dm/unzipper.svg
+[downloads-url]: https://npmjs.org/package/unzipper
+[coverage-image]: https://3tjjj5abqi.execute-api.us-east-1.amazonaws.com/prod/node-unzipper/badge
+[coverage-url]: https://3tjjj5abqi.execute-api.us-east-1.amazonaws.com/prod/node-unzipper/url
+
+# unzipper
+
+This is an active fork and drop-in replacement of the [node-unzip](https://github.com/EvanOxfeld/node-unzip) and addresses the following issues:
 * finish/close events are not always triggered, particular when the input stream is slower than the receivers
 * Any files are buffered into memory before passing on to entry
 
