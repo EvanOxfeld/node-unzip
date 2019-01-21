@@ -25,6 +25,7 @@ test("parse an archive that has a file that falls on a chunk boundary", {
     .on('entry', function(entry) {
         return entry.autodrain();
     }).on("finish", function() {
+        t.ok(true,'file complete');
         t.end();
     });
 });
