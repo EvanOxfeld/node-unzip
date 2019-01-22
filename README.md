@@ -162,6 +162,30 @@ fs.createReadStream('path/to/archive.zip')
   .then( () => console.log('done'), e => console.log('error',e));
 ```
 
+### Parse zip created by DOS ZIP or Windows ZIP Folders
+
+Archives created by legacy tools usually have filenames encoded with IBM PC (Windows OEM) character set.
+You can decode filenames with preferred character set:
+
+```js
+var il = require('iconv-lite');
+fs.createReadStream('path/to/archive.zip')
+  .pipe(unzipper.Parse())
+  .on('entry', function (entry) {
+    // if some legacy zip tool follow ZIP spec then this flag will be set
+    var isUnicode = entry.props.flags.isUnicode;
+    // decode "non-unicode" filename from OEM Cyrillic character set
+    var fileName = isUnicode ? entry.path : il.decode(entry.props.pathBuffer, 'cp866');
+    var type = entry.type; // 'Directory' or 'File'
+    var size = entry.size;
+    if (fileName === "Текстовый файл.txt") {
+      entry.pipe(fs.createWriteStream(fileName));
+    } else {
+      entry.autodrain();
+    }
+  });
+```
+
 ## Open
 Previous methods rely on the entire zipfile being received through a pipe.  The Open methods load take a different approach: load the central directory first (at the end of the zipfile) and provide the ability to pick and choose which zipfiles to extract, even extracting them in parallel.   The open methods return a promise on the contents of the directory, with individual `files` listed in an array.   Each file element has the following methods:
 * `stream([password])` - returns a stream of the unzipped content which can be piped to any destination
