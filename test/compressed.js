@@ -6,12 +6,29 @@ var path = require('path');
 var temp = require('temp');
 var dirdiff = require('dirdiff');
 var unzip = require('../');
+var il = require('iconv-lite');
 
 test("parse compressed archive (created by POSIX zip)", function (t) {
   var archive = path.join(__dirname, '../testData/compressed-standard/archive.zip');
 
   var unzipParser = unzip.Parse();
   fs.createReadStream(archive).pipe(unzipParser);
+  unzipParser.on('error', function(err) {
+    throw err;
+  });
+
+  unzipParser.on('close', t.end.bind(this));
+});
+
+test("parse compressed archive (created by DOS zip)", function (t) {
+  var archive = path.join(__dirname, '../testData/compressed-cp866/archive.zip');
+
+  var unzipParser = unzip.Parse();
+  fs.createReadStream(archive).pipe(unzipParser);
+  unzipParser.on('entry', function(entry) {
+    var fileName = entry.props.flags.isUnicode ? entry.path : il.decode(entry.props.pathBuffer, 'cp866');
+    t.equal(fileName, 'Тест.txt');
+  });
   unzipParser.on('error', function(err) {
     throw err;
   });
