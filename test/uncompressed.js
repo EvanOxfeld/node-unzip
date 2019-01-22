@@ -2,6 +2,7 @@
 
 var test = require('tap').test;
 var fs = require('fs');
+var os = require('os');
 var path = require('path');
 var temp = require('temp');
 var dirdiff = require('dirdiff');
@@ -66,10 +67,10 @@ test("do not extract zip slip archive", function (t) {
     function testNoSlip() {
       if (fs.hasOwnProperty('access')) {
         var mode = fs.F_OK | (fs.constants && fs.constants.F_OK);
-        return fs.access('/tmp/evil.txt', mode, evilFileCallback);
+        return fs.access(path.join(os.tmpdir(), 'evil.txt'), mode, evilFileCallback);
       }
       // node 0.10
-      return fs.stat('/tmp/evil.txt', evilFileCallback);
+      return fs.stat(path.join(os.tmpdir(), 'evil.txt'), evilFileCallback);
     }
 
     function evilFileCallback(err) {
