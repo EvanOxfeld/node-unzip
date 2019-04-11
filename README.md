@@ -233,7 +233,7 @@ main();
 ```
 
 
-This function takes a second parameter which can either be a string containing the `url` to request, or an `options` object to invoke the supplied `request` library with. This can be used when other request options are required, such as custom heders or authentication to a third party service.
+This function takes a second parameter which can either be a string containing the `url` to request, or an `options` object to invoke the supplied `request` library with. This can be used when other request options are required, such as custom headers or authentication to a third party service.
 
 ```js
 const request = require('google-oauth-jwt').requestWithJWT();
