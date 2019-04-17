@@ -67,7 +67,7 @@ fs.createReadStream('path/to/archive.zip')
   .on('entry', function (entry) {
     var fileName = entry.path;
     var type = entry.type; // 'Directory' or 'File'
-    var size = entry.size;
+    var size = entry.vars.uncompressedSize; // There is also compressedSize;
     if (fileName === "this IS the file I'm looking for") {
       entry.pipe(fs.createWriteStream('output/path'));
     } else {
@@ -89,7 +89,7 @@ fs.createReadStream('path/to/archive.zip')
     transform: function(entry,e,cb) {
       var fileName = entry.path;
       var type = entry.type; // 'Directory' or 'File'
-      var size = entry.size;
+      var size = entry.vars.uncompressedSize; // There is also compressedSize;
       if (fileName === "this IS the file I'm looking for") {
         entry.pipe(fs.createWriteStream('output/path'))
           .on('finish',cb);
@@ -177,7 +177,7 @@ fs.createReadStream('path/to/archive.zip')
     // decode "non-unicode" filename from OEM Cyrillic character set
     var fileName = isUnicode ? entry.path : il.decode(entry.props.pathBuffer, 'cp866');
     var type = entry.type; // 'Directory' or 'File'
-    var size = entry.size;
+    var size = entry.vars.uncompressedSize; // There is also compressedSize;
     if (fileName === "Текстовый файл.txt") {
       entry.pipe(fs.createWriteStream(fileName));
     } else {
