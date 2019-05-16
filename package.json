@@ -1,6 +1,6 @@
 {
   "name": "unzipper",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "description": "Unzip cross-platform streaming API ",
   "author": "Evan Oxfeld <eoxfeld@gmail.com>",
   "contributors": [
@@ -37,7 +37,7 @@
     "aws-sdk": "^2.77.0",
     "dirdiff": ">= 0.0.1 < 1",
     "iconv-lite": "^0.4.24",
-    "request": "2.79.0",
+    "request": "^2.88.0",
     "stream-buffers": ">= 0.2.5 < 1",
     "tap": ">= 0.3.0 < 1",
     "temp": ">= 0.4.0 < 1"
