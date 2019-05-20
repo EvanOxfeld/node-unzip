@@ -18,12 +18,12 @@ This is an active fork and drop-in replacement of the [node-unzip](https://githu
 * finish/close events are not always triggered, particular when the input stream is slower than the receivers
 * Any files are buffered into memory before passing on to entry
 
-The stucture of this fork is similar to the original, but uses Promises and inherit guarantees provided by node streams to ensure low memory footprint and guarantee finish/close events at the end of processing.   The new `Parser` will push any parsed `entries` downstream if you pipe from it, while still supporting the legacy `entry` event as well.   
+The structure of this fork is similar to the original, but uses Promises and inherit guarantees provided by node streams to ensure low memory footprint and guaranteed finish/close events at the end of processing.   The new `Parser` will push any parsed `entries` downstream if you pipe from it, while still supporting the legacy `entry` event as well.
 
 Breaking changes: The new `Parser` will not automatically drain entries if there are no listeners or pipes in place.
 
 Unzipper provides simple APIs similar to [node-tar](https://github.com/isaacs/node-tar) for parsing and extracting zip files.
-There are no added compiled dependencies - inflation is handled by node.js's built in zlib support. 
+There are no added compiled dependencies - inflation is handled by node.js's built in zlib support.
 
 Please note:  Methods that use the Central Directory instead of parsing entire file can be found under [`Open`](#open)
 
@@ -41,7 +41,7 @@ fs.createReadStream('path/to/archive.zip')
   .pipe(unzipper.Extract({ path: 'output/path' }));
 ```
 
-Extract emits the 'close' event once the zip's contents have been fully extracted to disk. Extract uses [fstream.Writer](https://www.npmjs.com/package/fstream) and therefore needs need an absolute path to the destination directory.  This directory will be automatically created if it doesn't already exits.
+Extract emits the 'close' event once the zip's contents have been fully extracted to disk. `Extract` uses [fstream.Writer](https://www.npmjs.com/package/fstream) and therefore needs need an absolute path to the destination directory.  This directory will be automatically created if it doesn't already exits.
 
 ### Parse zip file contents
 
@@ -51,7 +51,7 @@ __Important__: If you do not intend to consume an entry stream's raw data, call 
 contents. Otherwise the stream will halt.   `.autodrain()` returns an empty stream that provides `error` and `finish` events.
 Additionally you can call `.autodrain().promise()` to get the promisified version of success or failure of the autodrain.
 
-```
+```js
 // If you want to handle autodrain errors you can either:
 entry.autodrain().catch(e => handleError);
 // or
@@ -65,9 +65,9 @@ Here is a quick example:
 fs.createReadStream('path/to/archive.zip')
   .pipe(unzipper.Parse())
   .on('entry', function (entry) {
-    var fileName = entry.path;
-    var type = entry.type; // 'Directory' or 'File'
-    var size = entry.vars.uncompressedSize; // There is also compressedSize;
+    const fileName = entry.path;
+    const type = entry.type; // 'Directory' or 'File'
+    const size = entry.vars.uncompressedSize; // There is also compressedSize;
     if (fileName === "this IS the file I'm looking for") {
       entry.pipe(fs.createWriteStream('output/path'));
     } else {
@@ -87,9 +87,9 @@ fs.createReadStream('path/to/archive.zip')
   .pipe(stream.Transform({
     objectMode: true,
     transform: function(entry,e,cb) {
-      var fileName = entry.path;
-      var type = entry.type; // 'Directory' or 'File'
-      var size = entry.vars.uncompressedSize; // There is also compressedSize;
+      const fileName = entry.path;
+      const type = entry.type; // 'Directory' or 'File'
+      const size = entry.vars.uncompressedSize; // There is also compressedSize;
       if (fileName === "this IS the file I'm looking for") {
         entry.pipe(fs.createWriteStream('output/path'))
           .on('finish',cb);
@@ -115,7 +115,7 @@ fs.createReadStream('path/to/archive.zip')
     else
       entry.autodrain();
   }))
-  
+
 ```
 
 ### Parse a single file and pipe contents
@@ -132,7 +132,7 @@ fs.createReadStream('path/to/archive.zip')
 
 ### Buffering the content of an entry into memory
 
-While the recommended strategy of consuming the unzipped contents is using streams, it is sometimes convenient to be able to get the full buffered contents of each file .  Each `entry` provides a `.buffer` function that consumes the entry by buffering the contents into memory and returning a promise to the complete buffer.  
+While the recommended strategy of consuming the unzipped contents is using streams, it is sometimes convenient to be able to get the full buffered contents of each file .  Each `entry` provides a `.buffer` function that consumes the entry by buffering the contents into memory and returning a promise to the complete buffer.
 
 ```js
 fs.createReadStream('path/to/archive.zip')
@@ -150,7 +150,7 @@ fs.createReadStream('path/to/archive.zip')
 
 ### Parse.promise() syntax sugar
 
-The parser emits `finish` and `error` events like any other stream.  The parser additionally provides a promise wrapper around those two events to allow easy folding into existing Promise based structures.
+The parser emits `finish` and `error` events like any other stream.  The parser additionally provides a promise wrapper around those two events to allow easy folding into existing Promise-based structures.
 
 Example:
 
@@ -168,16 +168,16 @@ Archives created by legacy tools usually have filenames encoded with IBM PC (Win
 You can decode filenames with preferred character set:
 
 ```js
-var il = require('iconv-lite');
+const il = require('iconv-lite');
 fs.createReadStream('path/to/archive.zip')
   .pipe(unzipper.Parse())
   .on('entry', function (entry) {
     // if some legacy zip tool follow ZIP spec then this flag will be set
-    var isUnicode = entry.props.flags.isUnicode;
+    const isUnicode = entry.props.flags.isUnicode;
     // decode "non-unicode" filename from OEM Cyrillic character set
-    var fileName = isUnicode ? entry.path : il.decode(entry.props.pathBuffer, 'cp866');
-    var type = entry.type; // 'Directory' or 'File'
-    var size = entry.vars.uncompressedSize; // There is also compressedSize;
+    const fileName = isUnicode ? entry.path : il.decode(entry.props.pathBuffer, 'cp866');
+    const type = entry.type; // 'Directory' or 'File'
+    const size = entry.vars.uncompressedSize; // There is also compressedSize;
     if (fileName === "Текстовый файл.txt") {
       entry.pipe(fs.createWriteStream(fileName));
     } else {
@@ -190,8 +190,8 @@ fs.createReadStream('path/to/archive.zip')
 Previous methods rely on the entire zipfile being received through a pipe.  The Open methods load take a different approach: load the central directory first (at the end of the zipfile) and provide the ability to pick and choose which zipfiles to extract, even extracting them in parallel.   The open methods return a promise on the contents of the directory, with individual `files` listed in an array.   Each file element has the following methods:
 * `stream([password])` - returns a stream of the unzipped content which can be piped to any destination
 * `buffer([password])` - returns a promise on the buffered content of the file)
-If the file is encrypted you will have to supply a password to decrypt, otherwise you can leave blank.   
-Unlike adm-zip the Open methods will never read the entire zipfile into buffer.
+If the file is encrypted you will have to supply a password to decrypt, otherwise you can leave blank.
+Unlike `adm-zip` the Open methods will never read the entire zipfile into buffer.
 
 ### Open.file([path])
 Returns a Promise to the central directory information with methods to extract individual files.   `start` and `end` options are used to avoid reading the whole file.
@@ -219,8 +219,8 @@ This function will return a Promise to the central directory information from a 
 Live Example: (extracts a tiny xml file from the middle of a 500MB zipfile)
 
 ```js
-var request = require('request');
-var unzipper = require('./unzip');
+const request = require('request');
+const unzipper = require('./unzip');
 
 async function main() {
   const directory = await unzipper.Open.url(request,'http://www2.census.gov/geo/tiger/TIGER2015/ZCTA5/tl_2015_us_zcta510.zip');
@@ -256,14 +256,14 @@ async function getFile(req, res, next) {
 ```
 
 ### Open.s3([aws-sdk], [params])
-This function will return a Promise to the central directory information from a zipfile on S3.  Range-headers are used to avoid reading the whole file.    Unzipper does not ship with with the aws-sdk so you have to provide an instanciated client as first arguments.    The params object requires `Bucket` and `Key` to fetch the correct file.
+This function will return a Promise to the central directory information from a zipfile on S3.  Range-headers are used to avoid reading the whole file.    Unzipper does not ship with with the aws-sdk so you have to provide an instantiated client as first arguments.    The params object requires `Bucket` and `Key` to fetch the correct file.
 
 Example:
 
 ```js
-var unzipper = require('./unzip');
-var AWS = require('aws-sdk');
-var s3Client = AWS.S3(config);
+const unzipper = require('./unzip');
+const AWS = require('aws-sdk');
+const s3Client = AWS.S3(config);
 
 async function main() {
   const directory = await unzipper.Open.s3(s3Client,{Bucket: 'unzipper', Key: 'archive.zip'});
@@ -286,7 +286,7 @@ Example:
 
 ```js
 // never use readFileSync - only used here to simplify the example
-var buffer = fs.readFileSync('path/to/arhive.zip');  
+const buffer = fs.readFileSync('path/to/arhive.zip');
 
 async function main() {
   const directory = await unzipper.Open.buffer(buffer);
