@@ -18,7 +18,7 @@ This is an active fork and drop-in replacement of the [node-unzip](https://githu
 * finish/close events are not always triggered, particular when the input stream is slower than the receivers
 * Any files are buffered into memory before passing on to entry
 
-The structure of this fork is similar to the original, but uses Promises and inherit guarantees provided by node streams to ensure low memory footprint and guaranteed finish/close events at the end of processing.   The new `Parser` will push any parsed `entries` downstream if you pipe from it, while still supporting the legacy `entry` event as well.
+The structure of this fork is similar to the original, but uses Promises and inherit guarantees provided by node streams to ensure low memory footprint and emits finish/close events at the end of processing.   The new `Parser` will push any parsed `entries` downstream if you pipe from it, while still supporting the legacy `entry` event as well.
 
 Breaking changes: The new `Parser` will not automatically drain entries if there are no listeners or pipes in place.
 
