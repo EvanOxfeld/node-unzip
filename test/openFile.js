@@ -5,6 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var unzip = require('../');
 var il = require('iconv-lite');
+var Promise = require('bluebird');
 
 test("get content of a single file entry out of a zip", function (t) {
   var archive = path.join(__dirname, '../testData/compressed-standard/archive.zip');
@@ -42,5 +43,22 @@ test("get content of a single file entry out of a DOS zip", function (t) {
           t.equal(zipStr, 'Тестовый файл');
           t.end();
         });
+    });
+});
+
+
+test("get multiple buffers concurrently", function (t) {
+  var archive = path.join(__dirname, '../testData/compressed-directory-entry/archive.zip');
+  return unzip.Open.file(archive)
+    .then(function(directory) {
+      return Promise.all(directory.files.map(function(file) {
+        return file.buffer();
+      }))
+      .then(function(b) {
+        directory.files.forEach(function(file,i) {
+          t.equal(file.uncompressedSize,b[i].length);
+        });
+        t.end();
+      });
     });
 });
