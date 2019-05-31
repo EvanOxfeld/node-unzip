@@ -27,6 +27,7 @@ There are no added compiled dependencies - inflation is handled by node.js's bui
 
 Please note:  Methods that use the Central Directory instead of parsing entire file can be found under [`Open`](#open)
 
+
 ## Installation
 
 ```bash
@@ -193,7 +194,9 @@ Previous methods rely on the entire zipfile being received through a pipe.  The 
 If the file is encrypted you will have to supply a password to decrypt, otherwise you can leave blank.
 Unlike `adm-zip` the Open methods will never read the entire zipfile into buffer.
 
-### Open.file([path])
+The last argument is optional `options` object where you can specify `tailSize` (default 80 bytes), i.e. how many bytes should we read at the end of the zipfile to locate the endOfCentralDirectory.  This location can be variable depending on zip64 extensible data sector size.
+
+### Open.file([path], [options])
 Returns a Promise to the central directory information with methods to extract individual files.   `start` and `end` options are used to avoid reading the whole file.
 
 Example:
@@ -213,7 +216,7 @@ async function main() {
 main();
 ```
 
-### Open.url([requestLibrary], [url | options])
+### Open.url([requestLibrary], [url | params], [options])
 This function will return a Promise to the central directory information from a URL point to a zipfile.  Range-headers are used to avoid reading the whole file. Unzipper does not ship with a request library so you will have to provide it as the first option.
 
 Live Example: (extracts a tiny xml file from the middle of a 500MB zipfile)
@@ -255,7 +258,7 @@ async function getFile(req, res, next) {
 });
 ```
 
-### Open.s3([aws-sdk], [params])
+### Open.s3([aws-sdk], [params], [options])
 This function will return a Promise to the central directory information from a zipfile on S3.  Range-headers are used to avoid reading the whole file.    Unzipper does not ship with with the aws-sdk so you have to provide an instantiated client as first arguments.    The params object requires `Bucket` and `Key` to fetch the correct file.
 
 Example:
@@ -279,7 +282,7 @@ async function main() {
 main();
 ```
 
-### Open.buffer(buffer)
+### Open.buffer(buffer, [options])
 If you already have the zip file in-memory as a buffer, you can open the contents directly.
 
 Example:
