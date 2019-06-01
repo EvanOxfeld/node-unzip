@@ -27,6 +27,7 @@ There are no added compiled dependencies - inflation is handled by node.js's bui
 
 Please note:  Methods that use the Central Directory instead of parsing entire file can be found under [`Open`](#open)
 
+Chrome extension files (.crx) are zipfiles with an [extra header](http://www.adambarth.com/experimental/crx/docs/crx.html) at the start of the file.  Unzipper will parse .crx file with the streaming methods (`Parse` and `ParseOne`).  The `Open` methods will check for `crx` headers and parse crx files, but only if you provide `crx: true` in options.  
 
 ## Installation
 
@@ -194,7 +195,7 @@ Previous methods rely on the entire zipfile being received through a pipe.  The 
 If the file is encrypted you will have to supply a password to decrypt, otherwise you can leave blank.
 Unlike `adm-zip` the Open methods will never read the entire zipfile into buffer.
 
-The last argument is optional `options` object where you can specify `tailSize` (default 80 bytes), i.e. how many bytes should we read at the end of the zipfile to locate the endOfCentralDirectory.  This location can be variable depending on zip64 extensible data sector size.
+The last argument is optional `options` object where you can specify `tailSize` (default 80 bytes), i.e. how many bytes should we read at the end of the zipfile to locate the endOfCentralDirectory.  This location can be variable depending on zip64 extensible data sector size.   Additionally you can supply option `crx: true` which will check for a crx header and parse the file accordingly by shifting all file offsets by the length of the crx header.
 
 ### Open.file([path], [options])
 Returns a Promise to the central directory information with methods to extract individual files.   `start` and `end` options are used to avoid reading the whole file.
