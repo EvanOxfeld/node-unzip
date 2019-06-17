@@ -28,7 +28,7 @@ test("Only emit finish/close when extraction has completed", function (t) {
 
       delayStream._flush = function(cb) {
         filesDone += 1;
-        cb();
+        setTimeout(cb, 100);
         delayStream.emit('close');
       };
 
@@ -40,7 +40,7 @@ test("Only emit finish/close when extraction has completed", function (t) {
     unzipExtractor.on('error', function(err) {
       throw err;
     });
-    unzipExtractor.on('close', function() {
+    unzipExtractor.promise().then(function() {
       t.same(filesDone,2);
       t.end();
     });
