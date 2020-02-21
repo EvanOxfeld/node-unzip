@@ -27,7 +27,7 @@ There are no added compiled dependencies - inflation is handled by node.js's bui
 
 Please note:  Methods that use the Central Directory instead of parsing entire file can be found under [`Open`](#open)
 
-Chrome extension files (.crx) are zipfiles with an [extra header](http://www.adambarth.com/experimental/crx/docs/crx.html) at the start of the file.  Unzipper will parse .crx file with the streaming methods (`Parse` and `ParseOne`).  The `Open` methods will check for `crx` headers and parse crx files, but only if you provide `crx: true` in options.  
+Chrome extension files (.crx) are zipfiles with an [extra header](http://www.adambarth.com/experimental/crx/docs/crx.html) at the start of the file.  Unzipper will parse .crx file with the streaming methods (`Parse` and `ParseOne`).  The `Open` methods will check for `crx` headers and parse crx files, but only if you provide `crx: true` in options.
 
 ## Installation
 
@@ -62,7 +62,6 @@ entry.autodrain().on('error' => handleError);
 
 Here is a quick example:
 
-
 ```js
 fs.createReadStream('path/to/archive.zip')
   .pipe(unzipper.Parse())
@@ -77,6 +76,23 @@ fs.createReadStream('path/to/archive.zip')
     }
   });
 ```
+
+and the same example using async iterators:
+
+```js
+const zip = fs.createReadStream('path/to/archive.zip').pipe(unzipper.Parse({forceStream: true}));
+for await (const entry of zip) {
+  const fileName = entry.path;
+  const type = entry.type; // 'Directory' or 'File'
+  const size = entry.vars.uncompressedSize; // There is also compressedSize;
+  if (fileName === "this IS the file I'm looking for") {
+    entry.pipe(fs.createWriteStream('output/path'));
+  } else {
+    entry.autodrain();
+  }
+}
+```
+
 ### Parse zip by piping entries downstream
 
 If you `pipe` from unzipper the downstream components will receive each `entry` for further processing.   This allows for clean pipelines transforming zipfiles into unzipped data.
