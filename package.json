@@ -1,6 +1,6 @@
 {
   "name": "unzipper",
-  "version": "0.10.9",
+  "version": "0.10.10",
   "description": "Unzip cross-platform streaming API ",
   "author": "Evan Oxfeld <eoxfeld@gmail.com>",
   "contributors": [
