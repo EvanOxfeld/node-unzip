@@ -37,3 +37,21 @@ test("verify that autodrain promise works", function (t) {
       t.end();
     });
 });
+
+test("verify that autodrain resolves after it has finished", function (t) {
+  var archive = path.join(__dirname, '../testData/compressed-standard/archive.zip');
+
+  fs.createReadStream(archive)
+    .pipe(unzip.Parse())
+    .on('entry', function(entry) {
+      entry.autodrain()
+        .promise()
+        .then(function() {
+          entry.autodrain()
+          .promise()
+          .then(function() {
+            t.end();
+          });
+        });
+    })
+});
