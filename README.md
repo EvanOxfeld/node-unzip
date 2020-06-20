@@ -145,7 +145,7 @@ Example:
 ```js
 fs.createReadStream('path/to/archive.zip')
   .pipe(unzipper.ParseOne())
-  .pipe(fs.createReadStream('firstFile.txt'));
+  .pipe(fs.createWriteStream('firstFile.txt'));
 ```
 
 ### Buffering the content of an entry into memory
