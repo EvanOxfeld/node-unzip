@@ -1,7 +1,7 @@
 "use strict";
 
 const test = require("tap").test;
-const fs = require("fs-extra");
+const fs = require("fs");
 const unzip = require("../");
 const os = require("os");
 const request = require("request");
@@ -22,7 +22,6 @@ test("extract zip from url", function (t) {
         dirFiles.indexOf("favicon.ico") > -1;
 
       t.equal(isPassing, true);
-      fs.remove(extractPath);
       t.end();
     });
 });
