@@ -317,6 +317,41 @@ async function main() {
 main();
 ```
 
+### Open.custom(source, [options])
+This function can be used to provide a custom source implementation. The source parameter expects a `stream` and a `size` function to be implemented. The size function should return a `Promise` that resolves the total size of the file. The stream function should return a `Readable` stream according to the supplied offset and length parameters.
+
+Example:
+
+```js
+// Custom source implementation for reading a zip file from Google Cloud Storage
+const { Storage } = require('@google-cloud/storage');
+
+async function main() {
+  const storage = new Storage();
+  const bucket = storage.bucket('my-bucket');
+  const zipFile = bucket.file('my-zip-file.zip');
+  
+  const customSource = {
+    stream: function(offset, length) {
+      return zipFile.createReadStream({
+        start: offset,
+        end: length && offset + length
+      })
+    },
+    size: async function() {
+      const objMetadata = (await zipFile.getMetadata())[0];
+      return objMetadata.size;
+    }
+  };
+
+  const directory = await unzipper.Open.custom(customSource);
+  console.log('directory', directory);
+  // ...
+}
+
+main();
+```
+
 ### Open.[method].extract()
 
 The directory object returned from `Open.[method]` provides an `extract` method which extracts all the files to a specified `path`, with an optional `concurrency` (default: 1).
