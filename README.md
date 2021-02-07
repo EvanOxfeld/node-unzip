@@ -220,7 +220,7 @@ Example:
 ```js
 async function main() {
   const directory = await unzipper.Open.file('path/to/archive.zip');
-  console.log('directory', d);
+  console.log('directory', directory);
   return new Promise( (resolve, reject) => {
     directory.files[0]
       .stream()
