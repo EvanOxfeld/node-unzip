@@ -5,6 +5,7 @@ var path = require('path');
 var unzip = require('../');
 var fs = require('fs');
 var Stream = require('stream');
+var temp = require('temp');
 
 var UNCOMPRESSED_SIZE = 5368709120;
 var ZIP64_OFFSET = 72;
@@ -76,8 +77,19 @@ t.test('Parse files from zip64 format correctly', function (t) {
       .pipe(unzip.Parse())
       .on('entry', function(entry) {
         t.same(entry.vars.uncompressedSize, ZIP64_SIZE, 'Parse: File header');
-        t.end();
-      });
+      })
+      .on('close', function() { t.end(); });
+  });
+
+  t.test('in unzipper.extract', function (t) {
+    temp.mkdir('node-unzip-', function (err, dirPath) {
+      if (err) {
+        throw err;
+      }
+      fs.createReadStream(archive)
+        .pipe(unzip.Extract({ path: dirPath }))
+        .on('close', function() { t.end(); });
+    });
   });
 
   t.end();  
