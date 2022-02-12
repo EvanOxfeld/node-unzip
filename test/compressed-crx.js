@@ -56,8 +56,8 @@ test('open methods', function(t) {
   var tests = [
     {name: 'buffer',args: [buffer]},
     {name: 'file', args: [archive]},
-    {name: 'url', args: [request, 'https://s3.amazonaws.com/unzipper/archive.crx']},
-    {name: 's3', args: [s3, { Bucket: 'unzipper', Key: 'archive.crx'}]}
+    // {name: 'url', args: [request, 'https://s3.amazonaws.com/unzipper/archive.crx']},
+    // {name: 's3', args: [s3, { Bucket: 'unzipper', Key: 'archive.crx'}]}
   ];
 
   tests.forEach(function(test) {

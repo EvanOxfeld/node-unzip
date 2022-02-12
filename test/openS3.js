@@ -17,7 +17,7 @@ s3.headObject = function(params,cb) {
   return s3.makeUnauthenticatedRequest('headObject',params,cb);
 };
 
-test("get content of a single file entry out of a zip", function (t) {
+test("get content of a single file entry out of a zip", { skip: true }, function(t) {
   return unzip.Open.s3(s3,{ Bucket: 'unzipper', Key: 'archive.zip' })
     .then(function(d) {
       var file = d.files.filter(function(file) {
