@@ -1,0 +1,53 @@
+name: CI & Publish to NPM
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20.x
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Upgrade npm
+        run: |
+          npm install -g npm@latest
+          npm --version
+          node --version
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Publish package to npm
+        run: |
+          set -o pipefail
+          npm publish --provenance --access public 2>&1 | tee /tmp/npm-publish.log || EXIT=$?
+
+          if [ "${EXIT:-0}" -ne 0 ] && grep -qiE "previously published|cannot publish over the previously published versions" /tmp/npm-publish.log; then
+            echo "Version already published, nothing to do"
+            exit 0
+          fi
+
+          exit "${EXIT:-0}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

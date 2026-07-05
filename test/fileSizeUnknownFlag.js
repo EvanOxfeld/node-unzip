@@ -1,16 +1,13 @@
-'use strict';
-
-var test = require('tap').test;
-var fs = require('fs');
-var path = require('path');
-var temp = require('temp');
-var dirdiff = require('dirdiff');
-var unzip = require('../');
+import { test } from 'tap';
+import fs from 'fs';
+import temp from 'temp';
+import dirdiff from 'dirdiff';
+import { Parse, Extract } from '../index.js';
 
 test("parse archive w/ file size unknown flag set (created by OS X Finder)", function (t) {
-  var archive = path.join(__dirname, '../testData/compressed-OSX-Finder/archive.zip');
+  const archive = './testData/compressed-OSX-Finder/archive.zip';
 
-  var unzipParser = unzip.Parse();
+  const unzipParser = Parse();
   fs.createReadStream(archive).pipe(unzipParser);
   unzipParser.on('error', function(err) {
     throw err;
@@ -20,13 +17,13 @@ test("parse archive w/ file size unknown flag set (created by OS X Finder)", fun
 });
 
 test("extract archive w/ file size unknown flag set (created by OS X Finder)", function (t) {
-  var archive = path.join(__dirname, '../testData/compressed-OSX-Finder/archive.zip');
+  const archive = './testData/compressed-OSX-Finder/archive.zip';
 
   temp.mkdir('node-unzip-', function (err, dirPath) {
     if (err) {
       throw err;
     }
-    var unzipExtractor = unzip.Extract({ path: dirPath });
+    const unzipExtractor = Extract({ path: dirPath });
     unzipExtractor.on('error', function(err) {
       throw err;
     });
@@ -35,7 +32,7 @@ test("extract archive w/ file size unknown flag set (created by OS X Finder)", f
     fs.createReadStream(archive).pipe(unzipExtractor);
 
     function testExtractionResults() {
-      dirdiff(path.join(__dirname, '../testData/compressed-OSX-Finder/inflated'), dirPath, {
+      dirdiff('./testData/compressed-OSX-Finder/inflated', dirPath, {
         fileContents: true
       }, function (err, diffs) {
         if (err) {
@@ -49,13 +46,13 @@ test("extract archive w/ file size unknown flag set (created by OS X Finder)", f
 });
 
 test("archive w/ language encoding flag set", function (t) {
-  var archive = path.join(__dirname, '../testData/compressed-flags-set/archive.zip');
+  const archive = './testData/compressed-flags-set/archive.zip';
 
   temp.mkdir('node-unzip-', function (err, dirPath) {
     if (err) {
       throw err;
     }
-    var unzipExtractor = unzip.Extract({ path: dirPath });
+    const unzipExtractor = Extract({ path: dirPath });
     unzipExtractor.on('error', function(err) {
       throw err;
     });
@@ -64,7 +61,7 @@ test("archive w/ language encoding flag set", function (t) {
     fs.createReadStream(archive).pipe(unzipExtractor);
 
     function testExtractionResults() {
-      dirdiff(path.join(__dirname, '../testData/compressed-flags-set/inflated'), dirPath, {
+      dirdiff('./testData/compressed-flags-set/inflated', dirPath, {
         fileContents: true
       }, function (err, diffs) {
         if (err) {
